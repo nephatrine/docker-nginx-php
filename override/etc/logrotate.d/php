@@ -1,0 +1,4 @@
+/mnt/config/log/php-error.log /mnt/config/log/php-mail.log {
+	missingok
+	notifempty
+}
