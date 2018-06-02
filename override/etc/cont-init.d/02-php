@@ -1,5 +1,7 @@
 #!/usr/bin/with-contenv bash
 
+HOME=/mnt/config/home
+
 if [[ ! -f /mnt/config/etc/php.ini ]]; then
   s6-setuidgid guardian cp /etc/php/php.ini /mnt/config/etc/php.ini
 fi
