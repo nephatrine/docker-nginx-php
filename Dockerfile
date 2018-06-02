@@ -19,6 +19,7 @@ RUN echo "====== RUNTIME CONFIGURATION ======" \
   mariadb-client \
   net-snmp-libs \
   oniguruma \
+  sqlite \
   tidyhtml-libs \
   yaml \
  && mkdir -p /etc/php/php.d /var/lib/php /var/run/php-fpm \
