@@ -12,13 +12,7 @@ Certbot (LetsEncrypt) is installed to handle obtaining SSL certs in case this is
 
 ## Settings
 
-- **ADMINIP:** Administrative Access IP
-- **DNSADDR:** Resolver IPs (Space-Delimited)
-- **PUID:** Volume Owner UID
-- **PGID:** Volume Owner GID
-- **SSLEMAIL:** LetsEncrypt Email Address
-- **SSLDOMAINS:** LetsEncrypt (Sub)domains (comma-delimited)
-- **TZ:** Time Zone
+See the [base image](https://github.com/nephatrine/docker-nginx-ssl) for additional settings.
 
 ## Mount Points
 

@@ -1,20 +1,67 @@
 FROM nephatrine/nginx-ssl:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
-RUN echo "====== PREPARE BASIC UTILITIES ======" \
+RUN echo "====== RUNTIME CONFIGURATION ======" \
  && apk --update upgrade \
- && apk add argon2-libs c-client git gmp icu-libs libcurl libintl libldap \
-  libsasl libsodium libxpm libzip mariadb-client net-snmp-libs oniguruma \
-  tidyhtml-libs yaml \
+ && apk add \
+  argon2-libs \
+  c-client \
+  git \
+  gmp \
+  icu-libs \
+  libcurl \
+  libintl \
+  libldap \
+  libsasl \
+  libsodium \
+  libxpm \
+  libzip \
+  mariadb-client \
+  net-snmp-libs \
+  oniguruma \
+  tidyhtml-libs \
+  yaml \
  && mkdir -p /etc/php/php.d /var/lib/php /var/run/php-fpm \
  \
- && echo "====== PREPARE BUILD TOOLS ======" \
- && apk add --virtual .build-php argon2-dev autoconf bison bzip2-dev curl-dev \
-  cyrus-sasl-dev expat-dev freetype-dev g++ gd-dev gettext-dev gmp-dev icu-dev \
-  imap-dev krb5-dev libc-dev libjpeg-turbo-dev libpng-dev libressl-dev \
-  libsodium-dev libwebp-dev libxml2-dev libxpm-dev libxslt-dev libzip-dev \
-  linux-headers make mariadb-dev net-snmp-dev oniguruma-dev openldap-dev \
-  pcre-dev readline-dev sqlite-dev tidyhtml-dev yaml-dev zlib-dev \
+ && echo "====== BUILD CONFIGURATION ======" \
+ && apk add --virtual .build-php \
+  argon2-dev \
+  autoconf \
+  bison \
+  bzip2-dev \
+  curl-dev \
+  cyrus-sasl-dev \
+  expat-dev \
+  freetype-dev \
+  g++ \
+  gd-dev \
+  gettext-dev \
+  gmp-dev \
+  icu-dev \
+  imap-dev \
+  krb5-dev \
+  libc-dev \
+  libjpeg-turbo-dev \
+  libpng-dev \
+  libressl-dev \
+  libsodium-dev \
+  libwebp-dev \
+  libxml2-dev \
+  libxpm-dev \
+  libxslt-dev \
+  libzip-dev \
+  linux-headers \
+  make \
+  mariadb-dev \
+  net-snmp-dev \
+  oniguruma-dev \
+  openldap-dev \
+  pcre-dev \
+  readline-dev \
+  sqlite-dev \
+  tidyhtml-dev \
+  yaml-dev \
+  zlib-dev \
  \
  && echo "====== COMPILE PHP ======" \
  && cd /usr/src \
