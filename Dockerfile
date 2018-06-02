@@ -143,8 +143,6 @@ RUN echo "====== RUNTIME CONFIGURATION ======" \
   --enable-mysqlnd=shared \
   --with-pear=/usr/share/php \
   --with-pic \
- && wget -Oopenssl.c.patch 'https://bugs.php.net/patch-display.php?bug_id=76174&patch=patch-ext-openssl_openssl.c&revision=1522614841&download=1' \
- && patch /usr/src/php-src/ext/openssl/openssl.c openssl.c.patch \
  && make -j4 && make install \
  && strip /usr/bin/php \
  && strip /usr/sbin/php-fpm \
