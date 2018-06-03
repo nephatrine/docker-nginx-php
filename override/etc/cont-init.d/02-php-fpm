@@ -1,7 +1,5 @@
 #!/usr/bin/with-contenv bash
 
-HOME=/mnt/config/home
-
 if [[ ! -f /mnt/config/etc/php-fpm.conf ]]; then
   s6-setuidgid guardian cp /etc/php/php-fpm.conf /mnt/config/etc/php-fpm.conf
 fi
