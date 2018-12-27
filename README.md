@@ -1,19 +1,45 @@
-[GitHub](https://github.com/nephatrine/docker-base-php7) |
+[Git Repo](https://code.nephatrine.net/nephatrine/docker-base-php7) |
 [DockerHub](https://hub.docker.com/r/nephatrine/base-php7/) |
-[unRAID](https://github.com/nephatrine/unraid-docker-templates)
+[unRAID Template](https://github.com/nephatrine/unraid-docker-templates)
 
-# PHP7 Base Docker
+# PHP7 Base Container
 
-This is not intended to be used directly. It is intended to be used as a base image by other dockers. It could potentially be used for PHP application development or testing though.
+This is not intended to be used directly. It is intended to be used as a base image by other docker containers hosting specific PHP applications.
 
-It runs [PHP7](http://www.php.net/) on top of my [Alpine+NGINX](https://github.com/nephatrine/docker-nginx-ssl) docker. Compiling PHP is not quick and so I split this out into its own docker so I can iterate on the ones that depend on it without waiting around forever for it to build them.
+- [docker-nginx-ssl](https://code.nephatrine.net/nephatrine/docker-nginx-ssl)
+- [PHP 7.2](http://www.php.net/)
 
-Certbot (LetsEncrypt) is installed to handle obtaining SSL certs in case this is your only web docker. If you plan on hosting multiple applications/dockers, though I suggest having one [nginx-ssl](https://hub.docker.com/r/nephatrine/nginx-ssl/) docker that is publicly visible and handles the SSL certs for all domains. That docker can then proxy all your other nginx dockers which would actually be running on non-public IPs under plain HTTP.
+## Configuration
 
-## Settings
+- ``{config}/etc/crontab``: Crontab Entries
+- ``{config}/etc/logrotate.conf``: Logrotate General Configuration
+- ``{config}/etc/logrotate.d/*``: Logrotate Per-Application Configuration
+- ``{config}/etc/mime.types``: NGINX MIME Types
+- ``{config}/etc/nginx.conf``: NGINX General Configuration
+- ``{config}/etc/nginx.d/*``: NGINX Per-Site Configuration
+- ``{config}/etc/php.d/*``: PHP Extension Configuration
+- ``{config}/etc/php.ini``: PHP General Configuration
+- ``{config}/etc/php-fpm.conf``: PHP-FPM General Configuration
+- ``{config}/etc/php-fpm.d/*``: PHP-FPM Per-Site Configuration
+- ``{config}/ssl/live/{site}/``: SSL/TLS certificates
 
-See the [base image](https://github.com/nephatrine/docker-nginx-ssl) for additional settings.
+Certbot is included for requestung SSL certificates but you are better off just enabling HTTP from these containers and then using a single [docker-nginx-ssl](https://code.nephatrine.net/nephatrine/docker-nginx-ssl) container as a reverse proxy and handling all the HTTPS/SSL configuration there.
+
+## Ports
+
+- **80/tcp:** HTTP Port
+- **443/tcp:** HTTPS Port
+
+## Variables
+
+- **ADMINIP:** Administrative Access IP
+- **DNSADDR:** Resolver IPs (Space-Delimited)
+- **PUID:** Volume Owner UID
+- **PGID:** Volume Owner GID
+- **SSLEMAIL:** LetsEncrypt Email Address
+- **SSLDOMAINS:** LetsEncrypt (Sub)domains (comma-delimited)
+- **TZ:** Time Zone
 
 ## Mount Points
 
-- **/mnt/config:** Configuration Volume
+- **/mnt/config:** Configuration/Logs
