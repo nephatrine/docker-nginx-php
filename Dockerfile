@@ -1,74 +1,33 @@
 FROM nephatrine/nginx-ssl:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
-RUN echo "====== RUNTIME CONFIGURATION ======" \
+RUN echo "====== INSTALL PACKAGES ======" \
  && apk --update upgrade \
  && apk add \
-  argon2-libs \
-  c-client \
-  git \
-  gmp \
-  icu-libs \
-  libcurl \
-  libintl \
-  libldap \
-  libsasl \
-  libsodium \
-  libxpm \
-  libzip \
-  mariadb-client \
-  net-snmp-libs \
-  oniguruma \
-  sqlite \
-  tidyhtml-libs \
-  yaml \
+  argon2-libs c-client git gmp icu-libs libcurl libintl libldap libsasl \
+  libsodium libxpm libzip mariadb-client net-snmp-libs oniguruma sqlite \
+  tidyhtml-libs yaml \
+ \
+ && echo "====== CONFIGURE SYSTEM ======" \
  && mkdir -p /etc/php/php.d /var/lib/php /var/run/php-fpm \
  \
- && echo "====== BUILD CONFIGURATION ======" \
+ && echo "====== INSTALL BUILD TOOLS ======" \
  && apk add --virtual .build-php \
-  argon2-dev \
-  autoconf \
-  bison \
-  bzip2-dev \
-  curl-dev \
-  cyrus-sasl-dev \
-  expat-dev \
-  freetype-dev \
-  g++ \
-  gd-dev \
-  gettext-dev \
-  gmp-dev \
-  icu-dev \
-  imap-dev \
-  krb5-dev \
-  libc-dev \
-  libjpeg-turbo-dev \
-  libpng-dev \
-  libressl-dev \
-  libsodium-dev \
-  libwebp-dev \
-  libxml2-dev \
-  libxpm-dev \
-  libxslt-dev \
-  libzip-dev \
-  linux-headers \
-  make \
-  mariadb-dev \
-  net-snmp-dev \
-  oniguruma-dev \
-  openldap-dev \
-  pcre-dev \
-  readline-dev \
-  sqlite-dev \
-  tidyhtml-dev \
-  yaml-dev \
-  zlib-dev \
+  argon2-dev autoconf bison build-base bzip2-dev curl-dev cyrus-sasl-dev \
+  expat-dev freetype-dev gd-dev gettext-dev gmp-dev icu-dev imap-dev krb5-dev \
+  libjpeg-turbo-dev libpng-dev openssl-dev libsodium-dev libwebp-dev \
+  libxml2-dev libxpm-dev libxslt-dev libzip-dev linux-headers mariadb-dev \
+  net-snmp-dev oniguruma-dev openldap-dev pcre-dev readline-dev sqlite-dev \
+  tidyhtml-dev yaml-dev zlib-dev \
  \
  && echo "====== COMPILE PHP ======" \
  && cd /usr/src \
- && git clone https://github.com/php/php-src.git && cd php-src \
- && git fetch origin PHP-7.2 && git checkout PHP-7.2 \
- && ./buildconf --force && ./configure \
+ && git clone https://github.com/php/php-src.git \
+ && cd php-src \
+ && git fetch origin PHP-7.2 \
+ && git checkout PHP-7.2 \
+ && ./buildconf --force \
+ && ./configure \
   --prefix=/usr \
   --sysconfdir=/etc/php \
   --localstatedir=/var \
@@ -144,7 +103,8 @@ RUN echo "====== RUNTIME CONFIGURATION ======" \
   --enable-mysqlnd=shared \
   --with-pear=/usr/share/php \
   --with-pic \
- && make -j4 && make install \
+ && make -j4 \
+ && make install \
  && strip /usr/bin/php \
  && strip /usr/sbin/php-fpm \
  && strip /usr/lib/php/*/*.so \
@@ -166,12 +126,6 @@ RUN echo "====== RUNTIME CONFIGURATION ======" \
  && echo "====== CLEANUP ======" \
  && cd /usr/src \
  && apk del --purge .build-php \
- && rm -rf \
-  /tmp/* \
-  /usr/include/php \
-  /usr/lib/php/*/*.a \
-  /usr/lib/php/build \
-  /usr/src/* \
-  /var/cache/apk/*
+ && rm -rf /tmp/* /usr/include/php /usr/lib/php/*/*.a /usr/lib/php/build /usr/src/* /var/cache/apk/*
 
 COPY override /
