@@ -15,7 +15,7 @@ RUN echo "====== INSTALL PACKAGES ======" \
  && apk add --virtual .build-php \
   argon2-dev autoconf bison build-base bzip2-dev curl-dev cyrus-sasl-dev \
   expat-dev freetype-dev gd-dev gettext-dev gmp-dev icu-dev imap-dev krb5-dev \
-  libjpeg-turbo-dev libpng-dev openssl-dev libsodium-dev libwebp-dev \
+  libjpeg-turbo-dev libpng-dev libressl-dev libsodium-dev libwebp-dev \
   libxml2-dev libxpm-dev libxslt-dev libzip-dev linux-headers mariadb-dev \
   net-snmp-dev oniguruma-dev openldap-dev pcre-dev readline-dev sqlite-dev \
   tidyhtml-dev yaml-dev zlib-dev \
