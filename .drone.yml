@@ -1,0 +1,57 @@
+---
+kind: pipeline
+type: exec
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build-7
+  commands:
+  - docker build --pull -t pdr.nephatrine.net/nephatrine/nginx-php:7 .
+  - HOME=/mnt/config/home docker push pdr.nephatrine.net/nephatrine/nginx-php:7
+  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:7 nephatrine/nginx-php:7
+  - HOME=/mnt/config/home docker push nephatrine/nginx-php:7
+  - docker rmi pdr.nephatrine.net/nephatrine/nginx-php:7
+- name: build-latest
+  commands:
+  - docker tag nephatrine/nginx-php:7 pdr.nephatrine.net/nephatrine/nginx-php:latest
+  - docker build --pull -t pdr.nephatrine.net/nephatrine/nginx-php:latest .
+  - HOME=/mnt/config/home docker push pdr.nephatrine.net/nephatrine/nginx-php:latest
+  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:latest
+  - HOME=/mnt/config/home docker push nephatrine/nginx-php:latest
+  - docker rmi pdr.nephatrine.net/nephatrine/nginx-php:latest
+  depends_on:
+  - build-7
+
+---
+kind: pipeline
+name: after
+
+steps:
+- name: notify
+  image: appleboy/drone-discord
+  settings:
+    avatar_url: https://nephatrine.net/images/buttons/drone-ci.png
+    message: "Automated build of **{{repo.name}}:{{commit.branch}}** has returned [{{build.status}}]({{build.link}})."
+    username: DroneCI
+    webhook_id:
+      from_secret: wh-infra-id
+    webhook_token:
+      from_secret: wh-infra-tok
+
+depends_on:
+- default
+
+trigger:
+  status:
+  - success
+  - failure
+
+---
+kind: signature
+hmac: bbd4c8086c8f7e562fa595538fe5f3b90d7de86d833c22c12fdac21762197f7d
+
+...
