@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv bash
+
+if [[ ! -d /mnt/config/etc/php.d ]]; then
+  s6-setuidgid guardian mkdir -p /mnt/config/etc/php.d
+fi
+s6-setuidgid guardian cp -n /etc/php/php.d/* /mnt/config/etc/php.d/
+
+if [[ ! -f /mnt/config/etc/php.ini ]]; then
+  s6-setuidgid guardian cp /etc/php/php.ini /mnt/config/etc/php.ini
+fi
