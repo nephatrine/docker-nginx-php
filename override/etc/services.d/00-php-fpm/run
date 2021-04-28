@@ -1,2 +1,4 @@
 #!/usr/bin/with-contenv sh
+
+/etc/cont-init.d/01-php
 exec php-fpm -c /mnt/config/etc -y /mnt/config/etc/php-fpm.conf;
