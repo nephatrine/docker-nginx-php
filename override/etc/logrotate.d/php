@@ -2,3 +2,8 @@
 	missingok
 	notifempty
 }
+
+/mnt/config/log/php-fpm-access.log /mnt/config/log/php-fpm-error.log /mnt/config/log/php-fpm-slow.log {
+	missingok
+	notifempty
+}

@@ -5,6 +5,15 @@ if [[ ! -d /mnt/config/etc/php.d ]]; then
 fi
 s6-setuidgid guardian cp -n /etc/php/php.d/* /mnt/config/etc/php.d/
 
+if [[ ! -d /mnt/config/etc/php-fpm.d ]]; then
+  s6-setuidgid guardian mkdir -p /mnt/config/etc/php-fpm.d
+fi
+s6-setuidgid guardian cp -n /etc/php/php-fpm.d/* /mnt/config/etc/php-fpm.d/
+
 if [[ ! -f /mnt/config/etc/php.ini ]]; then
   s6-setuidgid guardian cp /etc/php/php.ini /mnt/config/etc/php.ini
+fi
+
+if [[ ! -f /mnt/config/etc/php-fpm.conf ]]; then
+  s6-setuidgid guardian cp /etc/php/php-fpm.conf /mnt/config/etc/php-fpm.conf
 fi
