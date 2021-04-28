@@ -1,49 +1,83 @@
-[Git Repo](https://code.nephatrine.net/nephatrine/docker-base-php7) |
-[DockerHub](https://hub.docker.com/r/nephatrine/base-php7/) |
-[unRAID Template](https://github.com/nephatrine/unraid-docker-templates)
+[Git](https://code.nephatrine.net/nephatrine/docker-nginx-php) |
+[Docker](https://hub.docker.com/r/nephatrine/nginx-php/) |
+[unRAID](https://code.nephatrine.net/nephatrine/unraid-containers)
 
-# PHP7 Base Container
+[![Build Status](https://ci.nephatrine.net/api/badges/nephatrine/docker-nginx-php/status.svg?ref=refs/heads/master)](https://ci.nephatrine.net/nephatrine/docker-nginx-php)
 
-This is not intended to be used directly. It is intended to be used as a base image by other docker containers hosting specific PHP applications.
+# PHP Web Server
 
-- [docker-nginx-ssl](https://code.nephatrine.net/nephatrine/docker-nginx-ssl)
-- [PHP 7.2](http://www.php.net/)
+This docker container manages the NGINX application with PHP support for web
+development or application hosting.
 
-## Configuration
+If using this as a standalone web server, you can configure TLS the same way as
+the [nginx-ssl](https://hub.docker.com/r/nephatrine/nginx-ssl/) container. If
+part of a larger envinronment, we suggest using a separate container as a
+reverse proxy server and handle TLS there rather than here.
 
-- ``{config}/etc/crontab``: Crontab Entries
-- ``{config}/etc/logrotate.conf``: Logrotate General Configuration
-- ``{config}/etc/logrotate.d/*``: Logrotate Per-Application Configuration
-- ``{config}/etc/mime.types``: NGINX MIME Types
-- ``{config}/etc/nginx.conf``: NGINX General Configuration
-- ``{config}/etc/nginx.d/*``: NGINX Per-Site Configuration
+- [NGINX](https://www.nginx.com/)
+- [PHP](https://www.php.net/)
+
+You can spin up a quick temporary test container like this:
+
+~~~
+docker run --rm -p 80:80 -it nephatrine/nginx-php:latest /bin/bash
+~~~
+
+This container is primarily intended to be used as a base container for PHP web
+applications.
+
+## Docker Tags
+
+- **nephatrine/nginx-php:7**: PHP 7.x
+
+## Configuration Variables
+
+You can set these parameters using the syntax ``-e "VARNAME=VALUE"`` on your
+``docker run`` command. Some of these may only be used during initial
+configuration and further changes may need to be made in the generated
+configuration files.
+
+- ``ADMINIP``: Administrator IP (*127.0.0.1*) (INITIAL CONFIG)
+- ``DNSADDR``: Resolver IPs (*8.8.8.8 8.8.4.4*) (INITIAL CONFIG)
+- ``PUID``: Mount Owner UID (*1000*)
+- ``PGID``: Mount Owner GID (*100*)
+- ``TRUSTSN``: Trusted Subnet (*192.168.0.0/16*) (INITIAL CONFIG)
+- ``TZ``: System Timezone (*America/New_York*)
+
+## Persistent Mounts
+
+You can provide a persistent mountpoint using the ``-v /host/path:/container/path``
+syntax. These mountpoints are intended to house important configuration files,
+logs, and application state (e.g. databases) so they are not lost on image
+update.
+
+- ``/mnt/config``: Persistent Data.
+
+Do not share ``/mnt/config`` volumes between multiple containers as they may
+interfere with the operation of one another.
+
+You can perform some basic configuration of the container using the files and
+directories listed below.
+
+- ``/mnt/config/etc/crontabs/<user>``: User Crontabs. [*]
+- ``/mnt/config/etc/logrotate.conf``: Logrotate Global Configuration.
+- ``/mnt/config/etc/logrotate.d/``: Logrotate Additional Configuration.
+- ``/mnt/config/etc/mime.type``: NGINX MIME Types. [*]
+- ``/mnt/config/etc/nginx.conf``: NGINX Configuration. [*]
+- ``/mnt/config/etc/nginx.d/``: NGINX Configuration. [*]
 - ``{config}/etc/php.d/*``: PHP Extension Configuration
 - ``{config}/etc/php.ini``: PHP General Configuration
 - ``{config}/etc/php-fpm.conf``: PHP-FPM General Configuration
 - ``{config}/etc/php-fpm.d/*``: PHP-FPM Per-Site Configuration
-- ``{config}/ssl/live/{site}/``: SSL/TLS certificates
+- ``/mnt/config/www/default/``: Default HTML Location.
 
-Certbot is included for requestung SSL certificates but you are better off just enabling HTTP from these containers and then using a single [docker-nginx-ssl](https://code.nephatrine.net/nephatrine/docker-nginx-ssl) container as a reverse proxy and handling all the HTTPS/SSL configuration there.
+**[*] Changes to some configuration files may require service restart to take
+immediate effect.**
 
-## Ports
+## Network Services
 
-- **80/tcp:** HTTP Port
-- **443/tcp:** HTTPS Port
+This container runs network services that are intended to be exposed outside
+the container. You can map these to host ports using the ``-p HOST:CONTAINER``
+or ``-p HOST:CONTAINER/PROTOCOL`` syntax.
 
-## Variables
-
-- **PUID:** Owner UID (*1000*)
-- **PGID:** Owner GID (*100*)
-- **TZ:** Time Zone (*"America/New_York"*)
-
-- **DNSADDR:** Resolver IPs ("8.8.8.8 8.8.4.4") (IGNORED AFTER INITIAL RUN) (SPACE-DELIMITED)
-
-- **ADMINIP**: Administrator IP ("127.0.0.1") (IGNORED AFTER INITIAL RUN)
-- **TRUSTSN:** Trusted Subnet ("192.168.0.0/16") (IGNORED AFTER INITIAL RUN)
-
-- **SSLEMAIL:** LetsEncrypt Email ("")
-- **SSLDOMAINS:** LetsEncrypt Domains ("") (COMMA-DELIMITED)
-
-## Mount Points
-
-- **/mnt/config:** Configuration/Logs
+- ``80/tcp``: HTTP Server. This is the default insecure web server.
