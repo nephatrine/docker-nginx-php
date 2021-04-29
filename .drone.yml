@@ -8,23 +8,23 @@ platform:
   arch: amd64
 
 steps:
-- name: build-7
+- name: build-8
   commands:
-  - docker build --pull -t pdr.nephatrine.net/nephatrine/nginx-php:7 .
-  - HOME=/mnt/config/home docker push pdr.nephatrine.net/nephatrine/nginx-php:7
-  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:7 nephatrine/nginx-php:7
-  - HOME=/mnt/config/home docker push nephatrine/nginx-php:7
-  - docker rmi pdr.nephatrine.net/nephatrine/nginx-php:7
+  - docker build --pull -t pdr.nephatrine.net/nephatrine/nginx-php:8 .
+  - HOME=/mnt/config/home docker push pdr.nephatrine.net/nephatrine/nginx-php:8
+  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:8 nephatrine/nginx-php:8
+  - HOME=/mnt/config/home docker push nephatrine/nginx-php:8
+  - docker rmi pdr.nephatrine.net/nephatrine/nginx-php:8
 - name: build-latest
   commands:
-  - docker tag nephatrine/nginx-php:7 pdr.nephatrine.net/nephatrine/nginx-php:latest
+  - docker tag nephatrine/nginx-php:8 pdr.nephatrine.net/nephatrine/nginx-php:latest
   - docker build --pull -t pdr.nephatrine.net/nephatrine/nginx-php:latest .
   - HOME=/mnt/config/home docker push pdr.nephatrine.net/nephatrine/nginx-php:latest
   - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:latest
   - HOME=/mnt/config/home docker push nephatrine/nginx-php:latest
   - docker rmi pdr.nephatrine.net/nephatrine/nginx-php:latest
   depends_on:
-  - build-7
+  - build-8
 
 ---
 kind: pipeline
@@ -52,6 +52,6 @@ trigger:
 
 ---
 kind: signature
-hmac: bbd4c8086c8f7e562fa595538fe5f3b90d7de86d833c22c12fdac21762197f7d
+hmac: 69e347ca4ae32f5cc28ae851c2d68cc17c756aa5134df2aecb97cd1b2bd08bbd
 
 ...

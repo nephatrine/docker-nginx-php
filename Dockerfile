@@ -15,7 +15,7 @@ RUN echo "====== INSTALL PACKAGES ======" \
    yaml \
  && rm -rf /var/cache/apk/*
 
-ARG PHP_VERSION=PHP-7.4
+ARG PHP_VERSION=PHP-8.0
 
 RUN echo "====== COMPILE PHP ======" \
  && apk add --virtual .build-php \

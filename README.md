@@ -28,7 +28,8 @@ applications.
 
 ## Docker Tags
 
-- **nephatrine/nginx-php:7**: PHP 7.x
+- **nephatrine/nginx-php:8**: PHP 8.0
+- **nephatrine/nginx-php:7**: PHP 7.4
 
 ## Configuration Variables
 
