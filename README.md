@@ -62,12 +62,12 @@ interfere with the operation of one another.
 You can perform some basic configuration of the container using the files and
 directories listed below.
 
-- ``/mnt/config/etc/crontabs/<user>``: User Crontabs. [*]
+- ``/mnt/config/etc/crontabs/<user>``: User Crontabs.
 - ``/mnt/config/etc/logrotate.conf``: Logrotate Global Configuration.
 - ``/mnt/config/etc/logrotate.d/``: Logrotate Additional Configuration.
-- ``/mnt/config/etc/mime.type``: NGINX MIME Types. [*]
-- ``/mnt/config/etc/nginx.conf``: NGINX Configuration. [*]
-- ``/mnt/config/etc/nginx.d/``: NGINX Configuration. [*]
+- ``/mnt/config/etc/mime.type``: NGINX MIME Types.
+- ``/mnt/config/etc/nginx.conf``: NGINX Configuration.
+- ``/mnt/config/etc/nginx.d/``: NGINX Configuration.
 - ``/mnt/config/etc/php.d/*``: PHP Extension Configuration
 - ``/mnt/config/etc/php.ini``: PHP General Configuration
 - ``/mnt/config/etc/php-fpm.conf``: PHP-FPM General Configuration
