@@ -28,6 +28,8 @@ applications.
 
 ## Docker Tags
 
+- **nephatrine/nginx-php:testing**: PHP Master
+- **nephatrine/nginx-php:latest**: PHP 8.0
 - **nephatrine/nginx-php:8**: PHP 8.0
 - **nephatrine/nginx-php:7**: PHP 7.4
 
@@ -66,10 +68,10 @@ directories listed below.
 - ``/mnt/config/etc/mime.type``: NGINX MIME Types. [*]
 - ``/mnt/config/etc/nginx.conf``: NGINX Configuration. [*]
 - ``/mnt/config/etc/nginx.d/``: NGINX Configuration. [*]
-- ``{config}/etc/php.d/*``: PHP Extension Configuration
-- ``{config}/etc/php.ini``: PHP General Configuration
-- ``{config}/etc/php-fpm.conf``: PHP-FPM General Configuration
-- ``{config}/etc/php-fpm.d/*``: PHP-FPM Per-Site Configuration
+- ``/mnt/config/etc/php.d/*``: PHP Extension Configuration
+- ``/mnt/config/etc/php.ini``: PHP General Configuration
+- ``/mnt/config/etc/php-fpm.conf``: PHP-FPM General Configuration
+- ``/mnt/config/etc/php-fpm.d/*``: PHP-FPM Per-Site Configuration
 - ``/mnt/config/www/default/``: Default HTML Location.
 
 **[*] Changes to some configuration files may require service restart to take
