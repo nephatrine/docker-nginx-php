@@ -34,7 +34,7 @@ steps:
   image: appleboy/drone-discord
   settings:
     avatar_url: https://nephatrine.net/images/buttons/drone-ci.png
-    message: "Automated build of **{{repo.name}}:{{commit.branch}}** has returned [{{build.status}}]({{build.link}})."
+    message: "Build of **[{{repo.name}}:{{commit.branch}}](<https://code.nephatrine.net/nephatrine/{{repo.name}}/src/branch/{{commit.branch}}>)** returned [{{build.status}}](<{{build.link}}>)."
     username: DroneCI
     webhook_id:
       from_secret: wh-infra-id
@@ -69,6 +69,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 0a2815f10f47b9f096bd0c4ef9e75b65d3861efeda11d8514b47ba67df71e5e2
+hmac: 0b5aa670f6d1c3133f04e624cd9470791b896ced5512a2cb75ee94613ff91313
 
 ...
