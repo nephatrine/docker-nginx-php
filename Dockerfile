@@ -1,39 +1,35 @@
 FROM nephatrine/nginx-ssl:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
-RUN echo "====== INSTALL PACKAGES ======" \
- && apk add \
-   argon2-libs aspell \
-   c-client \
-   gmp \
-   icu-libs \
-   libcurl libintl libsodium libzip \
-   mariadb-client \
-   oniguruma \
-   sqlite \
-   tidyhtml-libs \
-   yaml \
- && rm -rf /var/cache/apk/*
-
 ARG PHP_VERSION=PHP-8.0
-
 RUN echo "====== COMPILE PHP ======" \
- && apk add --virtual .build-php \
-   argon2-dev aspell-dev autoconf \
-   bison build-base bzip2-dev \
-   curl-dev \
-   expat-dev \
-   freetype-dev \
-   gettext-dev git gmp-dev \
-   icu-dev imap-dev \
-   libjpeg-turbo-dev libpng-dev libressl-dev libsodium-dev libwebp-dev libxml2-dev libxslt-dev libzip-dev linux-headers \
-   mariadb-dev \
-   oniguruma-dev \
-   re2c readline-dev \
-   sqlite-dev \
-   tidyhtml-dev \
-   yaml-dev \
-   zlib-dev \
+ && apk add \
+  argon2-libs aspell \
+  c-client \
+  gmp \
+  icu-libs \
+  libcurl libintl libsodium libzip \
+  mariadb-client \
+  oniguruma \
+  sqlite \
+  tidyhtml-libs \
+  yaml \
+ && apk add --virtual .build-php build-base \
+  argon2-dev aspell-dev autoconf \
+  bison bzip2-dev \
+  curl-dev \
+  expat-dev \
+  freetype-dev \
+  gettext-dev git gmp-dev \
+  icu-dev imap-dev \
+  libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxml2-dev libxslt-dev libzip-dev linux-headers \
+  mariadb-dev \
+  oniguruma-dev openssl-dev \
+  re2c readline-dev \
+  sqlite-dev \
+  tidyhtml-dev \
+  yaml-dev \
+  zlib-dev \
  && git -C /usr/src clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git && cd /usr/src/php-src \
  && ./buildconf --force \
  && ./configure \
@@ -99,16 +95,13 @@ RUN echo "====== COMPILE PHP ======" \
  && strip /usr/bin/php \
  && strip /usr/sbin/php-fpm \
  && strip /usr/lib/php/*/*.so \
- && cd /usr/src && rm -rf /usr/src/* \
- && rm -rf /usr/include/php /usr/lib/php/*/*.a /usr/lib/php/build \
- && apk del --purge .build-php && rm -rf /var/cache/apk/*
-
-RUN echo "====== CONFIGURE SYSTEM ======" \
  && mkdir -p /etc/php/php.d /var/lib/php /var/run/php-fpm \
  && echo "[PHP]" >>/etc/php/php.d/extensions.ini \
  && ls /usr/lib/php/*/*.so | egrep 'curl|gd|mbstring|sqlite|yaml|zip' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo "extension={}" >>/etc/php/php.d/extensions.ini \
  && ls /usr/lib/php/*/*.so | egrep -v 'curl|gd|mbstring|opcache|sqlite|yaml|zip' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo ";extension={}" >>/etc/php/php.d/extensions.ini \
  && ls /usr/lib/php/*/*.so | egrep 'opcache' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo "zend_extension={}" >>/etc/php/php.d/extensions.ini \
- && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf
+ && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf \
+ && cd /usr/src && rm -rf /usr/src/* /usr/include/php /usr/lib/php/*/*.a /usr/lib/php/build \
+ && apk del --purge .build-php && rm -rf /var/cache/apk/*
 
 COPY override /

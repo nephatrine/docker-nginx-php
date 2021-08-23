@@ -1,4 +1,4 @@
-[Git](https://code.nephatrine.net/nephatrine/docker-nginx-php) |
+[Git](https://code.nephatrine.net/nephatrine/docker-nginx-php/src/branch/master) |
 [Docker](https://hub.docker.com/r/nephatrine/nginx-php/) |
 [unRAID](https://code.nephatrine.net/nephatrine/unraid-containers)
 
@@ -10,10 +10,14 @@ This docker container manages the NGINX application with PHP support for web
 development or application hosting.
 
 If using this as a standalone web server, you can configure TLS the same way as
-the [nginx-ssl](https://hub.docker.com/r/nephatrine/nginx-ssl/) container. If
-part of a larger envinronment, we suggest using a separate container as a
+the [nginx-ssl](https://code.nephatrine.net/nephatrine/docker-nginx-ssl) container.
+If part of a larger envinronment, we suggest using a separate container as a
 reverse proxy server and handle TLS there rather than here.
 
+- [Alpine Linux](https://alpinelinux.org/)
+- [Skarnet Software](https://skarnet.org/software/)
+- [S6 Overlay](https://github.com/just-containers/s6-overlay)
+- [CertBot](https://certbot.eff.org/)
 - [NGINX](https://www.nginx.com/)
 - [PHP](https://www.php.net/)
 
@@ -28,10 +32,9 @@ applications.
 
 ## Docker Tags
 
-- **nephatrine/nginx-php:testing**: PHP Master
-- **nephatrine/nginx-php:latest**: PHP 8.0
-- **nephatrine/nginx-php:8**: PHP 8.0
-- **nephatrine/nginx-php:7**: PHP 7.4
+- **nephatrine/nginx-php:testing**: PHP 8 / NGINX Mainline / Alpine Edge
+- **nephatrine/nginx-php:latest**: PHP 8 / NGINX Mainline / Alpine Latest
+- **nephatrine/nginx-php:8**: PHP 8 / NGINX Mainline / Alpine Latest
 
 ## Configuration Variables
 
