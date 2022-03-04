@@ -1,9 +1,8 @@
 FROM nephatrine/nginx-ssl:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
-ARG PHP_VERSION=PHP-8.0
-RUN echo "====== COMPILE PHP ======" \
- && apk add \
+RUN echo "====== INSTALL TOOLS ======" \
+ && apk add --no-cache \
   argon2-libs aspell \
   c-client \
   gmp \
@@ -14,7 +13,11 @@ RUN echo "====== COMPILE PHP ======" \
   sqlite \
   tidyhtml-libs \
   yaml \
- && apk add --virtual .build-php build-base \
+ && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf
+
+ARG PHP_VERSION=PHP-8.1
+RUN echo "====== COMPILE PHP ======" \
+ && apk add --co-cache --virtual .build-php build-base \
   argon2-dev aspell-dev autoconf \
   bison bzip2-dev \
   curl-dev \
@@ -86,8 +89,7 @@ RUN echo "====== COMPILE PHP ======" \
   --with-xsl=shared,/usr \
   --with-zip=shared,/usr \
   --with-zlib=/usr \
- && make -j4 \
- && make install \
+ && make -j4 && make install \
  && cp php.ini-production /etc/php/php.ini \
  && pear update-channels \
  && pear upgrade --force \
@@ -100,8 +102,7 @@ RUN echo "====== COMPILE PHP ======" \
  && ls /usr/lib/php/*/*.so | egrep 'curl|gd|mbstring|sqlite|yaml|zip' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo "extension={}" >>/etc/php/php.d/extensions.ini \
  && ls /usr/lib/php/*/*.so | egrep -v 'curl|gd|mbstring|opcache|sqlite|yaml|zip' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo ";extension={}" >>/etc/php/php.d/extensions.ini \
  && ls /usr/lib/php/*/*.so | egrep 'opcache' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo "zend_extension={}" >>/etc/php/php.d/extensions.ini \
- && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf \
  && cd /usr/src && rm -rf /usr/src/* /usr/include/php /usr/lib/php/*/*.a /usr/lib/php/build \
- && apk del --purge .build-php && rm -rf /var/cache/apk/*
+ && apk del --purge .build-php
 
 COPY override /
