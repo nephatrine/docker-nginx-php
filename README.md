@@ -32,9 +32,7 @@ applications.
 
 ## Docker Tags
 
-- **nephatrine/nginx-php:testing**: PHP 8.1 / NGINX Mainline / Alpine Edge
 - **nephatrine/nginx-php:latest**: PHP 8.1 / NGINX Mainline / Alpine Latest
-- **nephatrine/nginx-php:8**: PHP 8.1 / NGINX Mainline / Alpine Latest
 
 ## Configuration Variables
 
