@@ -8,29 +8,40 @@ platform:
   arch: amd64
 
 steps:
-- name: build-8
+- name: build
+  environment:
+    PDR_USER:
+      from_secret: docker-user-pdr
+    PDR_PASS:
+      from_secret: docker-pass-pdr
   commands:
-  - docker build -t pdr.nephatrine.net/nephatrine/nginx-php:8 .
-  - HOME=/mnt/config/home docker push pdr.nephatrine.net/nephatrine/nginx-php:8
-  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:8 nephatrine/nginx-php:8
-  - HOME=/mnt/config/home docker push nephatrine/nginx-php:8
-  - docker rmi pdr.nephatrine.net/nephatrine/nginx-php:8
-- name: build-latest
+  - docker build -t pdr.nephatrine.net/nephatrine/nginx-php:cached --target builder .
+  - docker build -t pdr.nephatrine.net/nephatrine/nginx-php:latest .
+  - docker login -p "$PDR_PASS" -u "$PDR_USER" pdr.nephatrine.net
+  - docker push pdr.nephatrine.net/nephatrine/nginx-php:latest
+  - docker logout pdr.nephatrine.net
+- name: publish
+  environment:
+    DOCKER_USER:
+      from_secret: docker-user
+    DOCKER_PASS:
+      from_secret: docker-pass
   commands:
-  - docker tag nephatrine/nginx-php:8 pdr.nephatrine.net/nephatrine/nginx-php:latest
-  - HOME=/mnt/config/home docker push pdr.nephatrine.net/nephatrine/nginx-php:latest
   - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:latest
-  - HOME=/mnt/config/home docker push nephatrine/nginx-php:latest
-  - docker rmi pdr.nephatrine.net/nephatrine/nginx-php:latest
+  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:8.1
+  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:8
+  - docker login -p "$DOCKER_PASS" -u "$DOCKER_USER"
+  - docker push -a nephatrine/nginx-php
+  - docker logout
   depends_on:
-  - build-8
+  - build
 
 ---
 kind: pipeline
-name: after
+name: notify
 
 steps:
-- name: notify
+- name: notify-status
   image: appleboy/drone-discord
   failure: ignore
   settings:
@@ -55,7 +66,7 @@ kind: pipeline
 name: propogate
 
 steps:
-- name: trigger
+- name: propogate-downstream
   image: plugins/downstream
   failure: ignore
   settings:
@@ -64,13 +75,13 @@ steps:
       from_secret: drone-auth
     fork: false
     repositories:
-      - nephatrine/docker-nginx-h5ai@master
+    - nephatrine/docker-nginx-h5ai@master
 
 depends_on:
 - default
 
 ---
 kind: signature
-hmac: c808fc5148e896409d6759a7cd1411ed0995fbacd2cfbe1daeeefe12cb9574b8
+hmac: 850916797cc098a2edc215533ec8a01eb0927b90177cdd03a92b2aafea06f659
 
 ...

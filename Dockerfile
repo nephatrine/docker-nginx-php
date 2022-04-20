@@ -1,39 +1,15 @@
-FROM nephatrine/nginx-ssl:latest
-LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
+FROM pdr.nephatrine.net/nephatrine/alpine-builder:latest AS builder
 
-RUN echo "====== INSTALL TOOLS ======" \
- && apk add --no-cache \
-  argon2-libs aspell \
-  c-client \
-  gmp \
-  icu-libs \
-  libcurl libintl libsodium libzip \
-  mariadb-client \
-  oniguruma \
-  sqlite \
-  tidyhtml-libs \
-  yaml \
- && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf
+RUN echo "====== INSTALL LIBRARIES ======" \
+ && apk add --no-cache argon2-dev aspell-dev bzip2-dev curl-dev expat-dev freetype-dev gettext-dev gmp-dev \
+  icu-dev imap-dev libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxml2-dev libxslt-dev libzip-dev \
+  mariadb-dev oniguruma-dev openssl-dev readline-dev sqlite-dev tidyhtml-dev yaml-dev zlib-dev
 
 ARG PHP_VERSION=PHP-8.1
+RUN git -C /usr/src clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
+
 RUN echo "====== COMPILE PHP ======" \
- && apk add --co-cache --virtual .build-php build-base \
-  argon2-dev aspell-dev autoconf \
-  bison bzip2-dev \
-  curl-dev \
-  expat-dev \
-  freetype-dev \
-  gettext-dev git gmp-dev \
-  icu-dev imap-dev \
-  libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxml2-dev libxslt-dev libzip-dev linux-headers \
-  mariadb-dev \
-  oniguruma-dev openssl-dev \
-  re2c readline-dev \
-  sqlite-dev \
-  tidyhtml-dev \
-  yaml-dev \
-  zlib-dev \
- && git -C /usr/src clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git && cd /usr/src/php-src \
+ && cd /usr/src/php-src \
  && ./buildconf --force \
  && ./configure \
   --prefix=/usr \
@@ -90,19 +66,43 @@ RUN echo "====== COMPILE PHP ======" \
   --with-zip=shared,/usr \
   --with-zlib=/usr \
  && make -j4 && make install \
- && cp php.ini-production /etc/php/php.ini \
+ && cp php.ini-production /etc/php/php.ini
+
+RUN echo "====== UPDATE PEAR ======" \
  && pear update-channels \
  && pear upgrade --force \
- && yes '' | pecl install yaml \
- && strip /usr/bin/php \
- && strip /usr/sbin/php-fpm \
- && strip /usr/lib/php/*/*.so \
- && mkdir -p /etc/php/php.d /var/lib/php /var/run/php-fpm \
+ && yes '' | pecl install yaml
+
+FROM pdr.nephatrine.net/nephatrine/nginx-ssl:latest
+LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
+
+RUN echo "====== INSTALL TOOLS ======" \
+ && apk add --no-cache \
+  argon2-libs aspell \
+  c-client \
+  gmp \
+  icu-libs \
+  libcurl libintl libsodium libzip \
+  mariadb-client \
+  oniguruma \
+  sqlite \
+  tidyhtml-libs \
+  yaml \
+ && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf \
+ && mkdir -p /etc/php/php.d /usr/lib/php /usr/share/php /var/lib/php /var/run/php-fpm
+
+COPY --from=builder /etc/php/ /etc/php/
+COPY --from=builder \
+ /usr/bin/pear /usr/bin/peardev /usr/bin/pecl \
+ /usr/bin/php /usr/bin/php-config /usr/bin/phpize \
+ /usr/bin/
+COPY --from=builder /usr/lib/php/ /usr/lib/php/
+COPY --from=builder /usr/share/php/ /usr/share/php/
+COPY --from=builder /usr/sbin/php-fpm /usr/sbin/
+COPY override /
+
+RUN echo "====== Handle Extensions ======" \
  && echo "[PHP]" >>/etc/php/php.d/extensions.ini \
  && ls /usr/lib/php/*/*.so | egrep 'curl|gd|mbstring|sqlite|yaml|zip' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo "extension={}" >>/etc/php/php.d/extensions.ini \
  && ls /usr/lib/php/*/*.so | egrep -v 'curl|gd|mbstring|opcache|sqlite|yaml|zip' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo ";extension={}" >>/etc/php/php.d/extensions.ini \
- && ls /usr/lib/php/*/*.so | egrep 'opcache' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo "zend_extension={}" >>/etc/php/php.d/extensions.ini \
- && cd /usr/src && rm -rf /usr/src/* /usr/include/php /usr/lib/php/*/*.a /usr/lib/php/build \
- && apk del --purge .build-php
-
-COPY override /
+ && ls /usr/lib/php/*/*.so | egrep 'opcache' | tr '/' ' ' | tr '.' ' ' | awk '{print $(NF-1)}' | xargs -n1 -I{} echo "zend_extension={}" >>/etc/php/php.d/extensions.ini
