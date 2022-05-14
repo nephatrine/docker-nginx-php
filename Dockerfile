@@ -1,4 +1,4 @@
-FROM pdr.nephatrine.net/nephatrine/alpine-builder:latest AS builder
+FROM nephatrine/alpine:builder AS builder
 
 RUN echo "====== INSTALL LIBRARIES ======" \
  && apk add --no-cache argon2-dev aspell-dev bzip2-dev curl-dev expat-dev freetype-dev gettext-dev gmp-dev \
@@ -73,21 +73,12 @@ RUN echo "====== UPDATE PEAR ======" \
  && pear upgrade --force \
  && yes '' | pecl install yaml
 
-FROM pdr.nephatrine.net/nephatrine/nginx-ssl:latest
+FROM nephatrine/nginx-ssl:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
-RUN echo "====== INSTALL TOOLS ======" \
- && apk add --no-cache \
-  argon2-libs aspell \
-  c-client \
-  gmp \
-  icu-libs \
-  libcurl libintl libsodium libzip \
-  mariadb-client \
-  oniguruma \
-  sqlite \
-  tidyhtml-libs \
-  yaml \
+RUN echo "====== INSTALL PACKAGES ======" \
+ && apk add --no-cache argon2-libs aspell c-client gmp icu-libs libcurl libintl libsodium libzip \
+  mariadb-client oniguruma sqlite tidyhtml-libs yaml \
  && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf \
  && mkdir -p /etc/php/php.d /usr/lib/php /usr/share/php /var/lib/php /var/run/php-fpm
 
