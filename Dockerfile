@@ -1,15 +1,15 @@
-FROM nephatrine/alpine:builder AS builder
+FROM nephatrine/nxbuilder:alpine AS builder
 
 RUN echo "====== INSTALL LIBRARIES ======" \
- && apk add --no-cache argon2-dev aspell-dev bzip2-dev curl-dev expat-dev freetype-dev gettext-dev gmp-dev \
-  icu-dev imap-dev libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxml2-dev libxslt-dev libzip-dev \
-  mariadb-dev oniguruma-dev openssl-dev readline-dev sqlite-dev tidyhtml-dev yaml-dev zlib-dev
+ && apk add --no-cache argon2-dev aspell-dev bzip2-dev expat-dev freetype-dev gettext-dev gmp-dev \
+  imap-dev libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxslt-dev libzip-dev mariadb-dev \
+  oniguruma-dev readline-dev sqlite-dev tidyhtml-dev yaml-dev
 
 ARG PHP_VERSION=PHP-8.1
-RUN git -C /usr/src clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
+RUN git -C ${HOME} clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
 
 RUN echo "====== COMPILE PHP ======" \
- && cd /usr/src/php-src \
+ && cd ${HOME}/php-src \
  && ./buildconf --force \
  && ./configure \
   --prefix=/usr \
