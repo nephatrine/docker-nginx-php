@@ -28,7 +28,7 @@ steps:
       from_secret: docker-pass
   commands:
   - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:latest
-  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:8.1
+  - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:8.2
   - docker tag pdr.nephatrine.net/nephatrine/nginx-php:latest nephatrine/nginx-php:8
   - docker login -p "$DOCKER_PASS" -u "$DOCKER_USER"
   - docker push -a nephatrine/nginx-php
