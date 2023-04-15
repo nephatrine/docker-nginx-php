@@ -5,7 +5,7 @@ RUN echo "====== INSTALL LIBRARIES ======" \
   imap-dev libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxslt-dev libzip-dev mariadb-dev \
   oniguruma-dev readline-dev sqlite-dev tidyhtml-dev yaml-dev
 
-ARG PHP_VERSION=PHP-8.1
+ARG PHP_VERSION=PHP-8.2
 RUN git -C ${HOME} clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
 
 RUN echo "====== COMPILE PHP ======" \
