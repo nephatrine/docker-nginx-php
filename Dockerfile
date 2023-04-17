@@ -8,10 +8,10 @@ RUN echo "====== INSTALL LIBRARIES ======" \
   tidyhtml-dev yaml-dev
 
 ARG PHP_VERSION=PHP-8.2
-RUN git -C ${HOME} clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
+RUN git -C /root clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
 
 RUN echo "====== COMPILE PHP ======" \
- && cd ${HOME}/php-src \
+ && cd /root/php-src \
  && ./buildconf --force \
  && ./configure \
   --prefix=/usr \
