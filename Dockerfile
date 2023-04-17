@@ -1,9 +1,11 @@
 FROM nephatrine/nxbuilder:alpine AS builder
 
 RUN echo "====== INSTALL LIBRARIES ======" \
- && apk add --no-cache argon2-dev aspell-dev bzip2-dev expat-dev freetype-dev gettext-dev gmp-dev \
-  imap-dev libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxslt-dev libzip-dev mariadb-dev \
-  oniguruma-dev readline-dev sqlite-dev tidyhtml-dev yaml-dev
+ && apk add --no-cache \
+  argon2-dev aspell-dev bzip2-dev expat-dev freetype-dev gettext-dev gmp-dev \
+  imap-dev libjpeg-turbo-dev libpng-dev libsodium-dev libwebp-dev libxslt-dev \
+  libzip-dev mariadb-dev oniguruma-dev re2c readline-dev sqlite-dev \
+  tidyhtml-dev yaml-dev
 
 ARG PHP_VERSION=PHP-8.2
 RUN git -C ${HOME} clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
@@ -69,15 +71,15 @@ RUN echo "====== COMPILE PHP ======" \
  && cp php.ini-production /etc/php/php.ini
 
 RUN echo "====== UPDATE PEAR ======" \
- && pear update-channels \
- && pear upgrade --force \
+ && pear update-channels && pear upgrade --force \
  && yes '' | pecl install yaml
 
 FROM nephatrine/nginx-ssl:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
 RUN echo "====== INSTALL PACKAGES ======" \
- && apk add --no-cache argon2-libs aspell c-client gmp icu-libs libcurl libintl libsodium libzip \
+ && apk add --no-cache \
+  argon2-libs aspell c-client gmp icu-libs libcurl libintl libsodium libzip \
   mariadb-client oniguruma sqlite tidyhtml-libs yaml \
  && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf \
  && mkdir -p /etc/php/php.d /usr/lib/php /usr/share/php /var/lib/php /var/run/php-fpm
