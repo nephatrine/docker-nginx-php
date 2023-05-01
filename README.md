@@ -1,8 +1,6 @@
-[Git](https://code.nephatrine.net/nephatrine/docker-nginx-php/src/branch/master) |
+[Git](https://code.nephatrine.net/NephNET/docker-nginx-php/src/branch/master) |
 [Docker](https://hub.docker.com/r/nephatrine/nginx-php/) |
 [unRAID](https://code.nephatrine.net/nephatrine/unraid-containers)
-
-[![Build Status](https://ci.nephatrine.net/api/badges/nephatrine/docker-nginx-php/status.svg?ref=refs/heads/master)](https://ci.nephatrine.net/nephatrine/docker-nginx-php)
 
 # PHP Web Server
 
@@ -10,15 +8,12 @@ This docker container manages the NGINX application with PHP support for web
 development or application hosting.
 
 If using this as a standalone web server, you can configure TLS the same way as
-the [nginx-ssl](https://code.nephatrine.net/nephatrine/docker-nginx-ssl) container.
+the [nginx-ssl](https://code.nephatrine.net/NephNET/docker-nginx-ssl) container.
 If part of a larger envinronment, we suggest using a separate container as a
-reverse proxy server and handle TLS there rather than here.
+reverse proxy server and handle TLS there instead.
 
-- [Alpine Linux](https://alpinelinux.org/)
-- [Skarnet Software](https://skarnet.org/software/)
-- [S6 Overlay](https://github.com/just-containers/s6-overlay)
-- [CertBot](https://certbot.eff.org/)
-- [NGINX](https://www.nginx.com/)
+- [Alpine Linux](https://alpinelinux.org/) w/ [S6 Overlay](https://github.com/just-containers/s6-overlay)
+- [NGINX](https://www.nginx.com/) w/ [CertBot](https://certbot.eff.org/)
 - [PHP](https://www.php.net/)
 
 You can spin up a quick temporary test container like this:
@@ -32,7 +27,7 @@ applications.
 
 ## Docker Tags
 
-- **nephatrine/nginx-php:latest**: PHP 8.2 / NGINX Mainline / Alpine Latest
+- **nephatrine/nginx-php:latest**: PHP v8.2.6 / Alpine Latest
 
 ## Configuration Variables
 
