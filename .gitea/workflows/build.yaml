@@ -51,7 +51,6 @@ jobs:
           title: "Container Build (AARCH64)"
           webhook: ${{ secrets.DISCORD_WEBHOOK_BUILD }}
   build_manifest:
-    if: gitea.repository_owner == 'NephNET' && gitea.ref_name == 'master'
     needs: [build_amd64, build_arm64]
     runs-on: nephnet
     steps:
