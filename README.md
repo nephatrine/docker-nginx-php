@@ -27,7 +27,7 @@ applications.
 
 ## Docker Tags
 
-- **nephatrine/nginx-php:latest**: PHP v8.2.6 / Alpine Latest
+- **nephatrine/nginx-php:latest**: PHP v8.2.7 / Alpine Latest
 
 ## Configuration Variables
 
