@@ -79,8 +79,9 @@ LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
 RUN echo "====== INSTALL PACKAGES ======" \
  && apk add --no-cache \
-  argon2-libs aspell c-client gmp icu-libs libcurl libintl libsodium libzip \
-  mariadb-client oniguruma sqlite tidyhtml-libs yaml \
+  argon2-libs aspell c-client freetype gmp icu-libs libcurl libintl \
+  libjpeg-turbo libpng libsodium libwebp libxml2 libzip mariadb-client \
+  oniguruma sqlite-libs tidyhtml-libs yaml \
  && sed -i 's/index.html/index.php index.html/g' /etc/nginx/nginx.conf \
  && mkdir -p /etc/php/php.d /usr/lib/php /usr/share/php /var/lib/php /var/run/php-fpm
 
