@@ -1,0 +1,15 @@
+services:
+  php:
+    build: .
+    container_name: php
+    environment:
+      TZ: America/New_York
+      PUID: 1000
+      PGID: 1000
+      ADMINIP: 127.0.0.1
+      TRUSTSN: 192.168.0.0/16
+      DNSADDR: "8.8.8.8 8.8.4.4"
+    ports:
+      - "8080:80/tcp"
+    volumes:
+      - /mnt/containers/php:/mnt/config
