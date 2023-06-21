@@ -2,7 +2,7 @@
 [Docker](https://hub.docker.com/r/nephatrine/nginx-php/) |
 [unRAID](https://code.nephatrine.net/NephNET/unraid-containers)
 
-# PHP Web Server
+# NGINX PHP Web Server
 
 This docker container manages the NGINX application with PHP support for web
 development or application hosting.
