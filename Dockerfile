@@ -67,7 +67,8 @@ RUN echo "====== COMPILE PHP ======" \
   --with-xsl=shared,/usr \
   --with-zip=shared,/usr \
   --with-zlib=/usr \
- && make -j4 && make install \
+ && make -j$(( $(getconf _NPROCESSORS_ONLN) / 2 + 1 )) \
+ && make -j$(( $(getconf _NPROCESSORS_ONLN) / 2 + 1 )) install \
  && cp php.ini-production /etc/php/php.ini
 
 RUN echo "====== UPDATE PEAR ======" \
