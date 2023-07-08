@@ -1,41 +1,49 @@
-#!/bin/bash
+#!/bin/sh
+
+export HOME=/mnt/config/home
+
+cd /mnt/config/home || exit 1
 
 # Copy PHP Configuration
 
-if [[ ! -f /mnt/config/etc/php.ini ]]; then
-  /command/s6-setuidgid guardian /bin/cp /etc/php/php.ini /mnt/config/etc/php.ini
-fi
-if [[ ! -d /mnt/config/etc/php.d ]]; then
+if [ ! -d /mnt/config/etc/php.d ]; then
   /command/s6-setuidgid guardian /bin/mkdir -p /mnt/config/etc/php.d
 fi
-/command/s6-setuidgid guardian /bin/cp -n /etc/php/php.d/* /mnt/config/etc/php.d/
+if [ ! -f /mnt/config/etc/php.ini ] && [ -d /mnt/config/etc ]; then
+  /command/s6-setuidgid guardian /bin/cp /etc/php/php.ini /mnt/config/etc/php.ini
+fi
+if [ -d /mnt/config/etc/php.d ]; then
+  /command/s6-setuidgid guardian /bin/cp -Rn /etc/php/php.d/. /mnt/config/etc/php.d/
+fi
 
 # Copy PHP-FPM Configuration
 
-if [[ ! -f /mnt/config/etc/php-fpm.conf ]]; then
-  /command/s6-setuidgid guardian /bin/cp /etc/php/php-fpm.conf /mnt/config/etc/php-fpm.conf
-fi
-if [[ ! -d /mnt/config/etc/php-fpm.d ]]; then
+if [ ! -d /mnt/config/etc/php-fpm.d ]; then
   /command/s6-setuidgid guardian /bin/mkdir -p /mnt/config/etc/php-fpm.d
 fi
-/command/s6-setuidgid guardian /bin/cp -n /etc/php/php-fpm.d/* /mnt/config/etc/php-fpm.d/
+if [ ! -f /mnt/config/etc/php-fpm.conf ] && [ -d /mnt/config/etc ]; then
+  /command/s6-setuidgid guardian /bin/cp /etc/php/php-fpm.conf /mnt/config/etc/php-fpm.conf
+fi
+if [ -d /mnt/config/etc/php-fpm.d ]; then
+  /command/s6-setuidgid guardian /bin/cp -Rn /etc/php/php-fpm.d/. /mnt/config/etc/php-fpm.d/
+fi
 
 # Create Log Directory
 
-if [[ ! -d /mnt/config/log ]]; then
+if [ ! -d /mnt/config/log ]; then
   /command/s6-setuidgid guardian /bin/mkdir -p /mnt/config/log
 fi
-if [[ -f /mnt/config/log/php-fpm-access.log ]]; then
+if [ -f /mnt/config/log/php-fpm-access.log ]; then
   /bin/chown guardian:users /mnt/config/log/php-fpm-access.log
 else
   /command/s6-setuidgid guardian /bin/touch /mnt/config/log/php-fpm-access.log
 fi
-if [[ -f /mnt/config/log/php-fpm-error.log ]]; then
+if [ -f /mnt/config/log/php-fpm-error.log ]; then
   /bin/chown guardian:users /mnt/config/log/php-fpm-error.log
 else
   /command/s6-setuidgid guardian /bin/touch /mnt/config/log/php-fpm-error.log
 fi
-if [[ -f /mnt/config/log/php-fpm-slow.log ]]; then
+if [ -f /mnt/config/log/php-fpm-slow.log ]; then
   /bin/chown guardian:users /mnt/config/log/php-fpm-slow.log
 else
   /command/s6-setuidgid guardian /bin/touch /mnt/config/log/php-fpm-slow.log
@@ -43,18 +51,23 @@ fi
 
 # Create Var Directories
 
-if [[ -d /var/lib/php ]]; then
-  /bin/chown guardian:users /var/lib/php
-else
+if [ ! -d /var/lib/php ]; then
   /command/s6-setuidgid guardian /bin/mkdir -p /var/lib/php
-fi
-if [[ -d /var/run/php-fpm ]]; then
-  /bin/chown guardian:users /var/run/php-fpm
 else
+  /bin/chown guardian:users /var/lib/php
+fi
+if [ ! -d /var/run/php-fpm ]; then
   /command/s6-setuidgid guardian /bin/mkdir -p /var/run/php-fpm
+else
+  /bin/chown guardian:users /var/run/php-fpm
 fi
 
 # Start Service
 
-export HOME=/mnt/config/home
-exec /usr/sbin/php-fpm -c /mnt/config/etc -y /mnt/config/etc/php-fpm.conf;
+if [ -f /mnt/config/etc/php-fpm.conf ]; then
+  exec /usr/sbin/php-fpm -c /mnt/config/etc -y /mnt/config/etc/php-fpm.conf;
+else
+  /bin/echo "** no config exists **"
+  /bin/sleep 300
+  exit 0
+fi
