@@ -7,7 +7,7 @@
 This docker container manages the NGINX application with PHP support for web
 development or application hosting.
 
-The `latest` tag points to version `8.2.9` and this is the only image actively
+The `latest` tag points to version `8.2.11` and this is the only image actively
 being updated. There are tags for older versions, but these may no longer be
 using the latest NGINX version or Alpine version and packages.
 
