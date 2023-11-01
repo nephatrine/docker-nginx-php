@@ -126,11 +126,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASS }}
       - name: Docker Manifest
         run: |
-          docker manifest create nephatrine/nginx-php:8.2.11 --amend nephatrine/nginx-php:latest-amd64 --amend nephatrine/nginx-php:latest-arm64v8
+          docker manifest create nephatrine/nginx-php:8.2.12 --amend nephatrine/nginx-php:latest-amd64 --amend nephatrine/nginx-php:latest-arm64v8
           docker manifest create nephatrine/nginx-php:8.2 --amend nephatrine/nginx-php:latest-amd64 --amend nephatrine/nginx-php:latest-arm64v8
           docker manifest create nephatrine/nginx-php:8 --amend nephatrine/nginx-php:latest-amd64 --amend nephatrine/nginx-php:latest-arm64v8
           docker manifest create nephatrine/nginx-php:latest --amend nephatrine/nginx-php:latest-amd64 --amend nephatrine/nginx-php:latest-arm64v8
-          docker manifest push --purge nephatrine/nginx-php:8.2.11
+          docker manifest push --purge nephatrine/nginx-php:8.2.12
           docker manifest push --purge nephatrine/nginx-php:8.2
           docker manifest push --purge nephatrine/nginx-php:8
           docker manifest push --purge nephatrine/nginx-php:latest

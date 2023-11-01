@@ -7,7 +7,7 @@ RUN echo "====== INSTALL LIBRARIES ======" \
   libzip-dev mariadb-dev oniguruma-dev re2c readline-dev sqlite-dev \
   tidyhtml-dev yaml-dev
 
-ARG PHP_VERSION=PHP-8.2.11
+ARG PHP_VERSION=PHP-8.2.12
 RUN git -C /root clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
 
 RUN echo "====== COMPILE PHP ======" \
