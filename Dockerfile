@@ -1,4 +1,8 @@
-FROM nephatrine/nxbuilder:alpine AS builder
+# SPDX-FileCopyrightText: 2018 - 2024 Daniel Wolf <nephatrine@gmail.com>
+#
+# SPDX-License-Identifier: ISC
+
+FROM code.nephatrine.net/nephnet/nxb-alpine:latest AS builder
 
 RUN echo "====== INSTALL LIBRARIES ======" \
  && apk add --no-cache \
@@ -7,7 +11,7 @@ RUN echo "====== INSTALL LIBRARIES ======" \
   libzip-dev mariadb-dev oniguruma-dev re2c readline-dev sqlite-dev \
   tidyhtml-dev yaml-dev
 
-ARG PHP_VERSION=PHP-8.2.13
+ARG PHP_VERSION=PHP-8.2.16
 RUN git -C /root clone -b "$PHP_VERSION" --single-branch --depth=1 https://github.com/php/php-src.git
 
 RUN echo "====== COMPILE PHP ======" \
@@ -75,7 +79,7 @@ RUN echo "====== UPDATE PEAR ======" \
  && pear update-channels && pear upgrade --force \
  && yes '' | pecl install yaml
 
-FROM nephatrine/nginx-ssl:latest
+FROM code.nephatrine.net/nephnet/nginx-ssl:latest
 LABEL maintainer="Daniel Wolf <nephatrine@gmail.com>"
 
 RUN echo "====== INSTALL PACKAGES ======" \

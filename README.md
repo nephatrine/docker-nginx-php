@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2024 Daniel Wolf <nephatrine@gmail.com>
+
+SPDX-License-Identifier: ISC
+-->
+
 [Git](https://code.nephatrine.net/NephNET/docker-nginx-php/src/branch/master) |
 [Docker](https://hub.docker.com/r/nephatrine/nginx-php/) |
 [unRAID](https://code.nephatrine.net/NephNET/unraid-containers)
@@ -7,7 +13,7 @@
 This docker container manages the NGINX application with PHP support for web
 development or application hosting.
 
-The `latest` tag points to version `8.2.13` and this is the only image actively
+The `latest` tag points to version `8.2.16` and this is the only image actively
 being updated. There are tags for older versions, but these may no longer be
 using the latest NGINX version or Alpine version and packages.
 

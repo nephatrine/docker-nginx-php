@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: docker-nginx-php
+Upstream-Contact: Daniel Wolf <nephatrine@gmail.com>
+Source: https://code.nephatrine.net/NephNET/docker-nginx-php
+
+Files: override/etc/s6-overlay/*
+Copyright: 2018 - 2024 Daniel Wolf <nephatrine@gmail.com>
+License: ISC
